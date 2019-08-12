@@ -1,5 +1,6 @@
 # regression
 
+## Goal
 This is a project for building a framework for automated features and model selection when building regression models in
 Python and Apache Spark
 
