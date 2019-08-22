@@ -23,27 +23,38 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype):
     F = np.empty(shape = (5440,50))
     
     for i in range(0,r):
-        YY = np.empty()
-        for j in range(0: r + par_intercept):
-            if na[i][j] > 0:
-                Yi = Y[:][j]
+        YY = np.empty((1088,10))
+        for j in range(0, (r + par_intercept)):
+            if par_na[i][j] > 0:
+                Yi = Y.transpose()[:][j]
 # code in MATLAB
 # YY = [YY Yi([1:N - n]'*ones(1, na(i, j)) + ones(N - n, 1)*[0:-1:-(na(i, j) - 1)] + n - 1)]; 
 # appends two columns to YY
 # some kind of range inside the brackets -> Yi()
 # ?????????????
 # first [1:N - n]'*ones(1, na(i, j))
-                first = np.arange(1,N-n)
-                second = np.ones(1,(na[i][j]))
-                third_1 = np.multiply(first.transpose(),second)
+                first = np.arange(1,(N-n+1))
+                first = first.transpose()
+                second = np.ones(shape=(1,int(par_na[i][j])))
+                third_1 = np.tile(first,(2,1)).transpose() * second
 # second ones(N - n, 1)*[0:-1:-(na(i, j) - 1)]
-                first = np.ones((N-n),1)
-                second = np.arange(0,-(na[i][j]-1),-1)
-                third_2 = np.multiply(first,second)
+                first = np.ones(shape=((N-n),1))
+                second = np.arange(0,-(par_na[i][j]),-1)
+                third_2 = np.tile(first,(1,2)) * second
 # third first + second + n - 1
                 third_3 = third_1 + third_2 + n - 1
+
 # final
-               YY = np.concatenate(YY,Yi(third_3),axis = 1
+                # third_3 sluji kato nqkakav ukazatel za indeksi
+                # novoto Yi se zapulva sus stoinosti sprqmo third_3
+                rows,cols = third_3.shape
+                for x in range(rows):
+                    for y in range(cols):
+                        third_3[x][y] = Yi[int(third_3[x][y]-1)]
+                
+                Yi_to_append = third_3
                                    
                                    
 # this repeats several times
+               
+# testing
