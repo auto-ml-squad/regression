@@ -5,14 +5,23 @@ Created on Wed Aug 21 15:40:10 2019
 @author: Nikola
 """
 
-def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype):
+def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
     # returns the matrix F
     # NO SPARSE MATRICES USED/IMPLEMENTED
     # does not use par_nc, EE etc.
     import numpy as np
     
+    m = (U.shape)[1]
     N,r = Y.shape
     n = int(np.max([np.max(par_na),np.max(par_nb)]))
+    na = par_na
+    nb = par_nb
+    
+    # used in the creation of the Fi matrix
+    # initialized here
+    # clean later
+    current_row = 0
+    
     
     for i in range(0,r):
     # START OF YY
@@ -93,8 +102,8 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype):
         
         # code in MATLAB
         # Fi (i:r:(N-n)*r, 1:pi) = [-YY UU];
-        for item in range(i,(N-n)*r,r):
-            current_row = 0
+        
+        for item in range(i,(N-n)*r,r):          
             Fi[item][:] = -YYUU[current_row][:]
             current_row += 1
             if current_row == (N-n):
