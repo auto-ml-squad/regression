@@ -7,16 +7,15 @@ Created on Wed Aug 21 15:40:10 2019
 
 def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype):
     # returns the matrix F
+    # NO SPARSE MATRICES USED/IMPLEMENTED
+    # does not use par_nc, EE etc.
     import numpy as np
-
-    # this function has two parts
-    # according to the type of matrix (full or sparse)
-    # in our case only the sparse portion runs
     
-    # only the sparse matrix case is converted to python
+    N,r = Y.shape
+    n = int(np.max([np.max(par_na),np.max(par_nb)]))
     
-    # START OF YY
     for i in range(0,r):
+    # START OF YY
         for j in range(0, (r + par_intercept)):
             if par_na[i][j] > 0:
                 Yi = Y.transpose()[:][j]
@@ -79,15 +78,31 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype):
                     UU = Ui_to_append
                 else:
                     UU = np.concatenate((UU,Ui_to_append),axis = 1)
-        # to vector
-        # v MATLAB se suzdava sparse matrix
-        # kak se suzdava sparse matrica v python / numpy ??
-        YUE = -YY.flatten('F')
-        
-        
-        
-        
-
-    
-            
+            else:
+                UU = 0
+                
                     
+        # suzdavane na F matrica, sudurja6ta YY i UU
+        if UU != 0:    
+            YYUU = np.concatenate((UU,YY),axis = 1)
+        else:
+            YYUU = YY
+        
+        pi = int(np.sum(na[i][:]) + np.sum(nb[i][:]))
+        Fi = np.zeros(shape=(int(((N-n))*r),pi))
+        
+        # code in MATLAB
+        # Fi (i:r:(N-n)*r, 1:pi) = [-YY UU];
+        for item in range(i,(N-n)*r,r):
+            current_row = 0
+            Fi[item][:] = -YYUU[current_row][:]
+            current_row += 1
+            if current_row == (N-n):
+                current_row = 0
+                
+        if i == 0:
+            F = Fi
+        else:
+            F = np.concatenate((F,Fi),axis = 1)
+        
+    return F
