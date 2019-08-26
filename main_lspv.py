@@ -12,10 +12,8 @@ import matplotlib.pyplot as plt
 
 # EXTERNAL FUNCTIONS
 # TODO
-from py_lspv.py import lspv
-from py_lspv_apl.py import lspv_apl
-from py_roblspv.py import roblspv
-from py_vaf.py import vaf
+from lspv_apl import lspv_apl
+from lspv import lspv
 # CODE
 
 # READING DATA
@@ -30,11 +28,11 @@ par_intercept = 0
 # MODEL 1
 par_na = np.ones((r,r)) * 2
 par_nb = np.zeros((r,m))
-mdl1 = lspv(U,Y,par_intercept,par_na,par_nb)
-# mdl1 e struktura sudurjashta struktura i matrica
-# (vrushta matrica)
-Ym1 = lspv_apl(U,Y,mdl1)
+pm = lspv(U,Y,par_na,par_nb)
+# mdl1 e vektor
+Ym1 = lspv_apl(U,Y,pm,par_na,par_nb)
 #Ym1 vrushta matrica
+
 
 ## MODEL 2
 #par_na = np.ones((r,r)) * 2
@@ -58,14 +56,14 @@ Ym1 = lspv_apl(U,Y,mdl1)
 
 n = max( (par_na.max(),par_nb.max()))
 
-vaf_model_1 = vaf( Y[(n+1):][:], Ym1)
+#vaf_model_1 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_2 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_3 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_4 = vaf( Y[(n+1):][:], Ym1)
 
 # moje da se oformi tablica s matplotlib
-print ('VAF MODEL 1')
-print (vaf_model_1)
+#print ('VAF MODEL 1')
+#print (vaf_model_1)
 #print ('VAF MODEL 2')
 #print (vaf_model_2)
 #print ('VAF MODEL 3')
