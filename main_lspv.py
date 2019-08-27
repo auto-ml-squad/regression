@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # TODO
 from lspv_apl import lspv_apl
 from lspv import lspv
+from vaf import vaf
 # CODE
 
 # READING DATA
@@ -54,16 +55,19 @@ Ym1 = lspv_apl(U,Y,pm,par_na,par_nb)
 #Ym4 = Ym3.clip(max=0)
 
 
-n = max( (par_na.max(),par_nb.max()))
+n = int(max( (par_na.max(),par_nb.max())))
 
-#vaf_model_1 = vaf( Y[(n+1):][:], Ym1)
+vaf_model_1 = vaf( Y[n:][:], Ym1)
+
 #vaf_model_2 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_3 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_4 = vaf( Y[(n+1):][:], Ym1)
 
 # moje da se oformi tablica s matplotlib
-#print ('VAF MODEL 1')
-#print (vaf_model_1)
+print ('VAF MODEL 1')
+for item in vaf_model_1:
+    print ("--",item.round(2),"--",end='\n')
+    
 #print ('VAF MODEL 2')
 #print (vaf_model_2)
 #print ('VAF MODEL 3')
