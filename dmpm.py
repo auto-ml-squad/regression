@@ -42,7 +42,7 @@ def dmpm(U,Y,na = 0,nb = 0,intercept = 0):
             
     F = np.concatenate((Y_to_append_1,Y_to_append_2),axis = 1)
 
-    # U doesnt run in MATLAB
+    # U doesnt run in MATLAB for model_1
     if nb == 0 :
         pass
     else:
@@ -53,12 +53,12 @@ def dmpm(U,Y,na = 0,nb = 0,intercept = 0):
         
         # first part
         for i in range(nb,0,-1):
-            U_to_append_1 = -U[(n-nb+i):(N-nb+i)][:]
+            U_to_append_1 = U[(n-nb+i):(N-nb+i)][:]
             if i != nb:    
                 np.concatenate((U_to_append_1,U_to_append_1),axis = 1)
         # second part
         for i in range(nb,0,-1):
-            U_to_append_2 = -U[(n-nb+i-1):(N-nb+i-1)][:]
+            U_to_append_2 = U[(n-nb+i-1):(N-nb+i-1)][:]
             if i != nb:    
                 np.concatenate((U_to_append_2,U_to_append_2),axis = 1)
                 
