@@ -60,7 +60,6 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
                     # ¡SUVPADA S MATLAB!
                                    
     # START OF UU
-    # in MATLAB this never runs (nb is all zeros)
         for j in range(0, m):
             if par_nb[i][j] > 0:
                 Ui = U.transpose()[:][j]
@@ -68,11 +67,11 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
 # first [1:N - n]'*ones(1, nc(i, j))
                 first = np.arange(1,(N-n+1))
                 first = first.transpose()
-                second = np.ones(shape=(1,int(par_nc[i][j])))
+                second = np.ones(shape=(1,int(par_nb[i][j])))
                 third_1 = np.tile(first,(2,1)).transpose() * second
 # second ones(N - n, 1)*[0:-1:-(nc(i, j) - 1)]
                 first = np.ones(shape=((N-n),1))
-                second = np.arange(0,-(par_nc[i][j]),-1)
+                second = np.arange(0,-(par_nb[i][j]),-1)
                 third_2 = np.tile(first,(1,2)) * second
 # third first + second + n - 1
                 third_3 = third_1 + third_2 + n - 1
@@ -92,10 +91,10 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
                 
                     
         # suzdavane na F matrica, sudurja6ta YY i UU
-        if UU != 0:    
-            YYUU = np.concatenate((UU,YY),axis = 1)
+        if par_nb[i][j] > 0:
+            YYUU = np.concatenate((-YY,UU),axis = 1)
         else:
-            YYUU = YY
+            YYUU = -YY
         
         pi = int(np.sum(na[i][:]) + np.sum(nb[i][:]))
         Fi = np.zeros(shape=(int(((N-n))*r),pi))
@@ -104,7 +103,7 @@ def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
         # Fi (i:r:(N-n)*r, 1:pi) = [-YY UU];
         
         for item in range(i,(N-n)*r,r):          
-            Fi[item][:] = -YYUU[current_row][:]
+            Fi[item][:] = YYUU[current_row][:]
             current_row += 1
             if current_row == (N-n):
                 current_row = 0
