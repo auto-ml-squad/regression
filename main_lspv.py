@@ -19,7 +19,7 @@ from vaf import vaf
 
 # READING DATA
 
-U = pd.read_csv('data/retail/U.csv',header = None).to_numpy()
+U = pd.read_csv('data/retail/U_new.csv',header = None).to_numpy()
 Y = pd.read_csv('data/retail/Y.csv',header = None).to_numpy()
 
 N,r = Y.shape
@@ -36,10 +36,10 @@ Ym1 = lspv_apl(U,Y,pm,par_na,par_nb)
 
 
 ## MODEL 2
-#par_na = np.ones((r,r)) * 2
-#par_nb = np.ones((r,m)) * 2
-#mdl2 = lspv(U,Y,par_intercept,par_na,par_nb)
-#Ym2 = lspv_apl(U,Y,mdl2)
+par_na = np.ones((r,r)) * 2
+par_nb = np.ones((r,m)) * 2
+pm = lspv(U,Y,par_na,par_nb)
+Ym2 = lspv_apl(U,Y,pm,par_na,par_nb)
 #
 ## MODEL 3
 #par_na = np.ones((r,r)) * 2
@@ -59,7 +59,7 @@ n = int(max( (par_na.max(),par_nb.max())))
 
 vaf_model_1 = vaf( Y[n:][:], Ym1)
 
-#vaf_model_2 = vaf( Y[(n+1):][:], Ym1)
+vaf_model_2 = vaf( Y[(n):][:], Ym2)
 #vaf_model_3 = vaf( Y[(n+1):][:], Ym1)
 #vaf_model_4 = vaf( Y[(n+1):][:], Ym1)
 
@@ -68,8 +68,10 @@ print ('VAF MODEL 1')
 for item in vaf_model_1:
     print ("--",item.round(2),"--",end='\n')
     
-#print ('VAF MODEL 2')
-#print (vaf_model_2)
+print ('VAF MODEL 2')
+for item in vaf_model_2:
+    print ("--",item.round(2),"--",end='\n')
+    
 #print ('VAF MODEL 3')
 #print (vaf_model_3)
 #print ('VAF MODEL 4')
