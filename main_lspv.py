@@ -77,7 +77,6 @@ for item in vaf_model_4:
     print ("--",item.round(3),"--",end='\n')
 
 # plot Y vs Y from Models
-# Model 4 is unused (equivalent to Model 3)
 
 for col in range(0,Y.shape[1]):
     title = str('Product '+str(col+1))
@@ -92,13 +91,15 @@ for col in range(0,Y.shape[1]):
     y_data = Y[:-2,col]
     
     y_mdl_1 = Ym1[:,col]
-    y_mdl_2 = Ym1[:,col]
-    y_mdl_3 = Ym1[:,col]
+    y_mdl_2 = Ym2[:,col]
+    y_mdl_3 = Ym3[:,col]
+    y_mdl_4 = Ym4[:,col]
     
     plt.plot(x,y_data,alpha=0.3)
     plt.plot(x,y_mdl_1)
     plt.plot(x,y_mdl_2)
     plt.plot(x,y_mdl_3)
+    plt.plot(x,y_mdl_4)
     
     plt.show()
     
