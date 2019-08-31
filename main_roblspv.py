@@ -36,10 +36,15 @@ par_nb = np.ones((r,m)) * 2
 
 n = max(int(np.max(par_na)),int(np.max(par_nb)))
 
-# MODEL 1
+# additional params (ROB LS)
+opt_dvaf = 10**(-6)
+opt_max_iter = 10**(2)
+opt_hst = 1
+
+# MODEL 1 LS
 mdl = lspv(U,Y,par_na,par_nb)
 Ym1 = lspv_apl(U,Y,mdl,par_na,par_nb)
 
-# additional params
-opt_dvaf = 10**(-6)
-opt_max_iter = 10**(2)
+# MODEL 1 ROB LS
+mdl = roblspv(U,Y,par_na,par_nb,opt_dvaf,opt_max_iter,opt_hst)
+Ym2 = lspv_apl(U,Y,mdl,par_na,par_nb)
