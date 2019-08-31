@@ -25,3 +25,5 @@ def dv2dm(v,cols):
         for column in range(0,mat_cols):
             dm[row][column] = v[current_pos]
             current_pos += 1
+            
+    return dm
