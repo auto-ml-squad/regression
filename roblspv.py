@@ -101,7 +101,43 @@ def roblspv(
         vaf_arg_2 = dv2dm(ym,r)
         vaf_arg_3 = dv2dm(w,r)
         # vaf_weights FUNCTION NEEDED
+        vafw = vaf(vaf_arg_1,vaf_arg_2,vaf_arg_3)
         
+        # CODE IN MATLAB
+        # vaf0 = vaf(dv2dm(y, r), dv2dm(ym, r));
+        vaf0 = vaf(vaf_arg_1,vaf_arg_2)
+        
+        if opt_hst and iter == 1:
+            # FIRST RUN 
+            # RESHAPE VECTORS IN ARRAYS
+            # TO BE ABLE TO USE APPEND LATER
+            PM_base = np.ones(shape = (PM.shape[0],2))
+            PM_base[:,0] = PM[:]
+            PM = PM_base
+            PM[:,iter] = pm[:]
+            
+            VAFw_base = np.ones(shape = (VAFw.shape[0],2))
+            VAFw_base[:,0] = VAFw[:]
+            VAFw = VAFw_base
+            VAFw[:,iter] = vafw[:]
+            
+            VAF_base = np.ones(shape = (VAF.shape[0],2))
+            VAF_base[:,0] = VAF[:]
+            VAF = VAF_base
+            VAF[:,iter] = vaf0[:]
+            
+            YM_base = np.ones(shape = (YM.shape[0],2))
+            YM_base[:,0] = YM[:]
+            YM = YM_base
+            YM[:,iter] = ym[:]
+            
+        else:
+            # APPEND NEW VALUES TO THE ARRAYS
+            PM[:,iter] = pm[:]
+            VAFw = np.append(VAFw, vafw, axis = 1)
+            VAF = np.append(VAF, vaf0, axis = 1)
+            YM = np.append(YM, ym, axis = 1)
+            
         
         
         
