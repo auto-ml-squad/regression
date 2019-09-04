@@ -36,6 +36,7 @@ def roblspv(
     y = Y[(n):][:]
     y = y.transpose()
     y = y.flatten('F')
+    y = y.reshape(-1,1)
     
     pm = np.dot(first,second)
     pm = np.dot(pm,y)
@@ -52,16 +53,22 @@ def roblspv(
     
     if opt_hst:
         VAFw = vafw
+        VAFw = VAFw.reshape(-1,1)
         VAF = vaf0
+        VAF = VAF.reshape(-1,1)
         PM = pm
+        PM = PM.reshape(-1,1)
         YM = ym
-        
-    # ITERATION LOOP
+        YM = YM.reshape(-1,1)
+    # -------------------------------------------------------------------    
+    # START OF ITERATION LOOP
     iter = 0
     iterate = True
     
     while iterate:
+        print("THIS IS ITERATION",iter+1)
         iter += 1
+        
         # ----------------------------------------------------------------
         # CODE IN MATLAB
         # w = min(1, max(1e-8, abs(y - ym).^-1));
@@ -76,7 +83,7 @@ def roblspv(
         # ----------------------------------------------------------------
         # CODE IN MATLAB
         # ww = repmatc(w, size(F, 2));
-        ww = np.broadcast_to(w,shape = (F.shape[1],2176)).transpose()
+        ww = np.broadcast_to(w,shape = (2176,F.shape[1]))
         # ----------------------------------------------------------------
         # CODE IN MATLAB
         # pm = (F'*(ww.*F))^-1*(ww.*F)'*y;
@@ -89,8 +96,12 @@ def roblspv(
         first = np.multiply(ww,F).transpose()
         second = np.dot(first,y)
         pm = np.dot(fourth,second)
+        pm = pm.reshape(-1,1)
         # ----------------------------------------------------------------
+        # CODE IN MATLAB
+        # ym = F*pm;
         ym = np.dot(F,pm)
+        ym = ym.reshape(-1,1)
         
         vafw_1 = vafw
         
@@ -102,42 +113,39 @@ def roblspv(
         vaf_arg_3 = dv2dm(w,r)
         # vaf_weights FUNCTION NEEDED
         vafw = vaf(vaf_arg_1,vaf_arg_2,vaf_arg_3)
+        vafw = vafw.reshape(-1,1)
         
         # CODE IN MATLAB
         # vaf0 = vaf(dv2dm(y, r), dv2dm(ym, r));
         vaf0 = vaf(vaf_arg_1,vaf_arg_2)
+        vaf0 = vaf0.reshape(-1,1)
         
-        if opt_hst and iter == 1:
-            # FIRST RUN 
-            # RESHAPE VECTORS IN ARRAYS
-            # TO BE ABLE TO USE APPEND LATER
-            PM_base = np.ones(shape = (PM.shape[0],2))
-            PM_base[:,0] = PM[:]
-            PM = PM_base
-            PM[:,iter] = pm[:]
+        if opt_hst :
+            # appending values to arrays
+            PM = np.append(PM,pm,axis = 1)
+            VAFw = np.append(VAFw,vafw,axis = 1)
+            VAF = np.append(VAF,vaf0,axis = 1)
+            YM = np.append(YM,ym,axis = 1)
             
-            VAFw_base = np.ones(shape = (VAFw.shape[0],2))
-            VAFw_base[:,0] = VAFw[:]
-            VAFw = VAFw_base
-            VAFw[:,iter] = vafw[:]
-            
-            VAF_base = np.ones(shape = (VAF.shape[0],2))
-            VAF_base[:,0] = VAF[:]
-            VAF = VAF_base
-            VAF[:,iter] = vaf0[:]
-            
-            YM_base = np.ones(shape = (YM.shape[0],2))
-            YM_base[:,0] = YM[:]
-            YM = YM_base
-            YM[:,iter] = ym[:]
-            
+        # CHECK FOR END CONDITION
+        # CODE IN MATLAB
+        # if any(abs(vafw - vafw_1)) <= dvaf || iter >= maxIter, 
+        if iter >= opt_max_iter:
+            iterate = False
         else:
-            # APPEND NEW VALUES TO THE ARRAYS
-            PM[:,iter] = pm[:]
-            VAFw = np.append(VAFw, vafw, axis = 1)
-            VAF = np.append(VAF, vaf0, axis = 1)
-            YM = np.append(YM, ym, axis = 1)
-            
+            # creating abs(vafw - vafw_1)
+            vafw_differences = abs(np.subtract(vafw,vafw_1))
+            for row in vafw_differences:
+                for item in row:
+                    if item <= opt_dvaf:
+                        iterate = False
+                    
+    # CREATE RETURN LIST
+    return_list = [PM,VAFw,VAF,YM]
+    
+    return return_list
+    
+        
         
         
         

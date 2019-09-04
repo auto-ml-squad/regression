@@ -46,5 +46,23 @@ mdl = lspv(U,Y,par_na,par_nb)
 Ym1 = lspv_apl(U,Y,mdl,par_na,par_nb)
 
 # MODEL 1 ROB LS
-mdl = roblspv(U,Y,par_na,par_nb,opt_dvaf,opt_max_iter,opt_hst)
-Ym2 = lspv_apl(U,Y,mdl,par_na,par_nb)
+# roblspv returns a list of NumPy arrays which are later unpacked
+model_list = roblspv(U,Y,par_na,par_nb,opt_dvaf,opt_max_iter,opt_hst)
+# return_list = [PM,VAFw,VAF,YM]
+mdl_pm = model_list[0]
+mdl_vafw = model_list[1]
+mdl_vaf = model_list[2]
+mdl_ym = model_list[3]
+
+Ym2 = lspv_apl(U,Y,mdl_pm,par_na,par_nb)
+
+vaf_model_1 = vaf( Y[a+n:][:], Ym1[a:][:])
+print ('VAF MODEL 1')
+for item in vaf_model_1:
+    print ("--",item.round(3),"--",end='\n')
+
+vaf_model_2 = vaf( Y[a+n:][:], Ym2[a:][:])
+print ('VAF MODEL 2')
+for item in vaf_model_2:
+    print ("--",item.round(3),"--",end='\n')
+
