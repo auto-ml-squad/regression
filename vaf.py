@@ -7,7 +7,8 @@ def vaf(Y, Ym,
     # IGNORES DEGREES OF FREEDOM
     # ----------------------------------------------------------------
     # NO WEIGHTS PROVIDED
-    if p.shape[0] == p.shape[1] == 0:
+    if w.shape[0] == w.shape[1] == 0:
+        print("NO WEIGHTS")
         # code in MATLAB
         # max(0, diag(eye(size(Y, 2)) - cov(Y - Ym)./cov(Y)))*100
         # first
@@ -24,8 +25,9 @@ def vaf(Y, Ym,
         third = np.diag(first-second)
         # fourth
         # max(0, third) * 100
+        fourth = np.clip(third, a_min = 0, a_max = np.max(third)) * 100
         # why is MAX used with 0 as first argument?
-        fourth = third * 100
+        #fourth = third * 100
         VAF = fourth
         
         return VAF
@@ -58,6 +60,7 @@ def vaf(Y, Ym,
     for row in range(0,first.shape[0]):
         first[row][:] = mY[:]
     Yc = np.subtract(Y,first)
+    
     #    SSE = sum(E.*(E.*w))';
     # PRECISION PROBLEMS HERE
     first = np.zeros(shape = E.shape)
@@ -68,6 +71,7 @@ def vaf(Y, Ym,
     second = np.multiply(E,first)
     third = np.sum(second,axis = 0).transpose()
     SSE = third
+    
     #    SST = sum(Yc.*(Yc.*w))';
     first = np.zeros(shape = Yc.shape)
     for row in range(0,Yc.shape[0]):
@@ -76,10 +80,28 @@ def vaf(Y, Ym,
     # PRECISION PROBLEMS HERE
     second = np.multiply(Yc,first)
     third = np.sum(second,axis = 0).transpose()
-    SSE = third
+    SST = third
     
     # CODE IN MATLAB
     # VAF = max(zeros(r, 1), 100*(ones(r, 1) - (SSE./(Nw - p - 1))./(SST./(Nw - 1))));
+    #first = (SSE./(Nw - p - 1));
+    first = np.divide(SSE,(Nw - p - 1))
+    #second = (SST./(Nw - 1));
+    second = np.divide(SST,(Nw -1 ))
+    #third = first ./ second;
+    third = np.divide(first,second)
+    #fourth = 100*(ones(r,1) - third);
+    fourth = np.multiply(100,(np.subtract(np.ones(shape=(r,1)),third)))
+    fourth = fourth[0][:]
+    #fifth = max( zeros(r,1), fourth);
+    fifth = np.clip(fourth,a_min=0,a_max = np.max(fourth))
+    
+    VAF = fifth
+    
+    return VAF
+    
+    
+    
         
     
     
