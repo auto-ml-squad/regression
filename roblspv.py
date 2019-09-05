@@ -141,7 +141,7 @@ def roblspv(
                         iterate = False
                     
     # CREATE RETURN LIST
-    return_list = [PM,VAFw,VAF,YM]
+    return_list = [PM,VAFw,VAF,YM,pm]
     
     return return_list
     

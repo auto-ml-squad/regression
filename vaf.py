@@ -8,7 +8,7 @@ def vaf(Y, Ym,
     # ----------------------------------------------------------------
     # NO WEIGHTS PROVIDED
     if w.shape[0] == w.shape[1] == 0:
-        print("NO WEIGHTS")
+        #print("NO WEIGHTS")
         # code in MATLAB
         # max(0, diag(eye(size(Y, 2)) - cov(Y - Ym)./cov(Y)))*100
         # first
@@ -45,7 +45,7 @@ def vaf(Y, Ym,
     # if size(w, 2) < r, 
     # w = repmat(w, 1, r); 
     if w.shape[1] < r:
-        print("SHAPE CHANGED")
+        #print("SHAPE CHANGED")
         w = np.broadcast_to(w,shape = (1,r))
         
     #    mY = sum(Y.*w)'./Nw;
