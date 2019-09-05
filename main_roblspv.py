@@ -15,6 +15,7 @@ from lspv_apl import lspv_apl
 from lspv import lspv
 from roblspv import roblspv
 from vaf import vaf
+from dv2dm import dv2dm
 
 # CODE
 # READING DATA
@@ -48,11 +49,13 @@ Ym1 = lspv_apl(U,Y,mdl,par_na,par_nb)
 # MODEL 1 ROB LS
 # roblspv returns a list of NumPy arrays which are later unpacked
 model_list = roblspv(U,Y,par_na,par_nb,opt_dvaf,opt_max_iter,opt_hst)
-# return_list = [PM,VAFw,VAF,YM]
-mdl_pm = model_list[0]
-mdl_vafw = model_list[1]
-mdl_vaf = model_list[2]
-mdl_ym = model_list[3]
+# return_list = [PM,VAFw,VAF,YM,pm]
+mdl_PM = model_list[0]
+mdl_VAFW = model_list[1]
+mdl_VAF = model_list[2]
+mdl_YM = model_list[3]
+mdl_pm = model_list[4]
+
 
 Ym2 = lspv_apl(U,Y,mdl_pm,par_na,par_nb)
 
@@ -61,8 +64,38 @@ print ('VAF MODEL 1')
 for item in vaf_model_1:
     print ("--",item.round(3),"--",end='\n')
 
+test_1 = Y[a+n:][:]
+test_2 = Ym2[a:][:]
+
 vaf_model_2 = vaf( Y[a+n:][:], Ym2[a:][:])
 print ('VAF MODEL 2')
 for item in vaf_model_2:
     print ("--",item.round(3),"--",end='\n')
-
+    
+    
+# ADDITIONAL PLOT
+    #plt.figure()
+    
+    plt.title('RED = SALES, GREEN = ITERATIONS OF PM, \n\
+              BLUE = MODEL 1, PURPLE = MODEL 2 (ROB_LS)')
+    plt.xlabel('Days')
+    plt.ylabel('Sales')
+    # plots each iteration of PM
+    h = mdl_PM.shape[1]
+    for i in range(0,h):
+        Ymi = dv2dm(mdl_YM[:,i],r)
+        Ymi = Ymi[a+1:,:]
+        plt.plot(Ymi, 'g',antialiased=True,linewidth = 0.5, alpha = 1)
+    # plots Y
+    Y_to_plot = Y[a+n:,:]
+    plt.plot(Y_to_plot, 'r', antialiased = True, linewidth = 0.8)
+    # plots Ym1
+    Ym1_to_plot = Ym1[a:,:]
+    plt.plot(Ym1_to_plot, 'b', antialiased = True, 
+             linewidth = 3, alpha = 0.2)
+    # plots Ym2
+    Ym2_to_plot = Ym2[a:,:]
+    plt.plot(Ym2_to_plot, 'm', antialiased = True, 
+             linewidth = 0.8, alpha = 0.5)
+  
+    plt.show()
