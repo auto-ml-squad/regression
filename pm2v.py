@@ -29,7 +29,7 @@ def pm2v(Pm,par_na = 0,par_nb = 0):
     pm = np.array(())
     
     for i in range(0,r):
-        print("ITERATION")
+        #print("ITERATION")
         pari = Pm[:,i]
         if nna > 0:
             for j in range(0,r):
