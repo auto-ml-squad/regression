@@ -12,11 +12,8 @@ def roblspm(
         opt_hst = 0):
     
     import numpy as np
-    from numpy import linalg
-    from dmpv import dmpv
     from dmpm import dmpm
     from vaf import vaf
-    from dv2dm import dv2dm
     from pm2v import pm2v
     
     r = (Y.shape)[1]
@@ -73,66 +70,62 @@ def roblspm(
     iterate = True
     
     while iterate:
-        print("THIS IS ITERATION",iter+1)
         iter += 1
         
         # ----------------------------------------------------------------
         # CODE IN MATLAB
-        # w = min(1, max(1e-8, abs(y - ym).^-1));
+        # ww = min(1, max(1e-8, abs(Y - Ym).^-1));
         # abs(y - ym).^-1
-        first = np.absolute(np.subtract(y,ym))
+        first = np.absolute(np.subtract(Y,Ym))
         first = np.power(first,(-1))
         # max(1e-8, first) 
         second = np.clip(first, a_min = 10**(-8), a_max = np.max(first))
         # min(1,second)
         third = np.clip(second, a_min = np.min(first), a_max = 1)
-        w = third
+        ww = third
         # ----------------------------------------------------------------
-        # CODE IN MATLAB
-        # ww = repmatc(w, size(F, 2));
-        ww = np.broadcast_to(w,shape = (2176,F.shape[1]))
-        # ----------------------------------------------------------------
-        # CODE IN MATLAB
-        # pm = (F'*(ww.*F))^-1*(ww.*F)'*y;
-        # (F'*(ww.*F))^-1
-        first = F.transpose()
-        second = np.multiply(ww,F)
-        third = np.dot(first,second)
-        fourth = np.linalg.inv(third)
-        # (ww.*F)'*y
-        first = np.multiply(ww,F).transpose()
-        second = np.dot(first,y)
-        pm = np.dot(fourth,second)
-        pm = pm.reshape(-1,1)
-        # ----------------------------------------------------------------
-        # CODE IN MATLAB
-        # ym = F*pm;
-        ym = np.dot(F,pm)
-        ym = ym.reshape(-1,1)
-        
+        for i in range(0,r):
+            # Wi = repmat(ww(:, i), 1, r*na + m*nb);
+            vctr = ww[:,i]
+            Wi = np.tile(vctr,((r*na + m*nb),1)).transpose()
+            # Pm(:, i) = (F'*(Wi.*F))^-1*F'*(ww(:, i).*Y(:, i));
+            # first = (F'*(Wi.*F))^-1
+            first_1 = F.transpose()
+            first_2 = np.multiply(Wi,F)
+            first_3 = np.dot(first_1,first_2)
+            first_4 = np.linalg.inv(first_3)
+            first = first_4
+            # second = F'
+            second = F.transpose()
+            # third = (ww(:, i).*Y(:, i))
+            third_1 = ww[:,i]
+            third_2 = Y[:,i]
+            third = np.multiply(third_1,third_2)
+            # forming Pm
+            Pm_1 = np.dot(first,second)
+            Pm_2 = np.dot(Pm_1,third)
+            Pm_final = Pm_2
+            Pm[:,i] = Pm_final
+            
+        Ym = np.dot(F,Pm)
         vafw_1 = vafw
+        vafw = vaf(Y,Ym,ww)
+        vaf0 = vaf(Y,Ym)
         
-        # CODE IN MATLAB
-        # vafw = vaf(dv2dm(y, r), dv2dm(ym, r), dv2dm(w, r));
-        # vafw = vaf(Y          , Ym          , w          );
-        vaf_arg_1 = dv2dm(y,r)
-        vaf_arg_2 = dv2dm(ym,r)
-        vaf_arg_3 = dv2dm(w,r)
-        # vaf_weights FUNCTION NEEDED
-        vafw = vaf(vaf_arg_1,vaf_arg_2,vaf_arg_3)
-        vafw = vafw.reshape(-1,1)
-        
-        # CODE IN MATLAB
-        # vaf0 = vaf(dv2dm(y, r), dv2dm(ym, r));
-        vaf0 = vaf(vaf_arg_1,vaf_arg_2)
-        vaf0 = vaf0.reshape(-1,1)
         
         if opt_hst :
             # appending values to arrays
-            PM = np.append(PM,pm,axis = 1)
+            to_append = pm2v(Pm,par_na,par_nb).reshape(-1,1)
+            PM = np.append(PM,to_append,axis = 1)
+            
+            vafw = vafw.reshape(-1,1)
             VAFw = np.append(VAFw,vafw,axis = 1)
+            
+            vaf0 = vaf0.reshape(-1,1)
             VAF = np.append(VAF,vaf0,axis = 1)
-            YM = np.append(YM,ym,axis = 1)
+            
+            to_append = Ym.transpose().flatten('F').reshape(-1,1)
+            YM = np.append(YM,to_append,axis = 1)
             
         # CHECK FOR END CONDITION
         # CODE IN MATLAB
@@ -146,8 +139,10 @@ def roblspm(
                 for item in row:
                     if item <= opt_dvaf:
                         iterate = False
+    
+    print("The function [roblspm.py] took",iter,"iterations to reach the end condition.")
                     
     # CREATE RETURN LIST
-    return_list = [PM,VAFw,VAF,YM,pm]
+    return_list = [PM,VAFw,VAF,YM,Pm]
     
     return return_list
