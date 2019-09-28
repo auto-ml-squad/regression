@@ -1,4 +1,9 @@
-# -*- coding: utf-8 -*-
+"""
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
+"""
 import numpy as np
 def vaf(Y, Ym,
         w = np.empty(shape=(0,0))

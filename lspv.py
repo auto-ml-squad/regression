@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Aug 19 15:07:35 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def lspv(U,Y,par_na,par_nb):
     # returns the vector pm
     import numpy as np

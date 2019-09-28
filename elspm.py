@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Sep  9 18:07:22 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def elspm(U,Y,
           par_na = 0,
           par_nb = 0, 

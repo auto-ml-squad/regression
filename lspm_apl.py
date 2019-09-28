@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Aug 28 17:19:23 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def lspm_apl(U,Y,Pm,par_na,par_nb):
     import numpy as np
     from dmpm import dmpm

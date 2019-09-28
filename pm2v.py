@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Sep  5 17:39:15 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def pm2v(Pm,par_na = 0,par_nb = 0):
     # IGNORES NC
     # RETURNS A VECTOR

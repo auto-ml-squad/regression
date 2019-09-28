@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Aug 30 14:33:28 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def roblspv(
         U,Y,par_na,par_nb, 
         opt_dvaf = 10**(-2), 

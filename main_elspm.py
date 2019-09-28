@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Sep  9 17:53:31 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 # LIBRARIES
 import numpy as np
 import pandas as pd

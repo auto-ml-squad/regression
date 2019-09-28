@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Aug 29 15:21:22 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def wlspv(U,Y,W = 'no weights', par_na = 0, par_nb = 0):
     import numpy as np
     from numpy import linalg

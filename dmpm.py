@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Aug 20 14:58:09 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
 import numpy as np
 

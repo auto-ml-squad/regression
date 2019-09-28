@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Aug 28 16:43:00 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def lspm(U,Y,par_na = "nothing",par_nb = "nothing"):
     # returns a matrix
     

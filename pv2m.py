@@ -1,5 +1,9 @@
-# -*- coding: utf-8 -*-
-
+"""
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
+"""
 def pv2m(pm,par_na = 0,par_nb = 0, par_nc = 0):
     import numpy as np
     # IGNORES INTERCEPT

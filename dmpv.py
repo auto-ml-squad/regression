@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Aug 21 15:40:10 2019
-
-@author: Nikola
+author: OPEN-MAT
+date: 	15.06.2019
+Matlab version: 26 Apr 2009
+Course: Multivariable Control Systems
 """
-
 def dmpv(U,Y,par_na,par_nb,par_nc = 0,par_intercept = 0, par_mtype = 0):
     # returns the matrix F
     # NO SPARSE MATRICES USED/IMPLEMENTED
