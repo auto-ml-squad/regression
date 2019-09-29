@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+## Съдържа кода от MATLAB написан на Python и две Jupyter Notebooks които съдържат повече информация за използваните данни.
+
+### MATLAB :arrow_right: Python
+:ballot_box_with_check: **main_lspm** -  достигат се същите резултати като в Matlab. 
+
+:ballot_box_with_check: **main_lspv** - достигат се същите резултати като в Matlab. 
+
+:ballot_box_with_check: **main_roblspm** - достигат се същите резултати като в Matlab. 
+
+:ballot_box_with_check: **main_roblspv** - достигат се същите резултати като в Matlab. 
+
+:ballot_box_with_check: **main_wlspv** - достигат се същите резултати като в Matlab. 
+
+:ballot_box_with_check: **main_elspm** - достигат се същите резултати като в Matlab. 
+
+:x: **main_elspv** - алгоритъмът в Matlab използва разредени матрици и не получава същите резултати при използването на пълни матрици. В Numpy не съм намерил подходящи команди за използване на такива разредени матрици, и затова не мога да пренапиша тази ф-я в Python.
+
+---
+:warning: **Допълнителни файлове** - почти всички (без тези използвани само от main_elspv) са пренаписани на Python. Нужно е допълнително изчистване и подреждане на кода и добавяне на ясни и смислени коментари за повече яснота при използване на кода.
+=======
 # regression
 Multivariable System Identification
 
@@ -34,3 +55,4 @@ The main scripts: <br>
 	main_ivpv.m <br>
 	other scripts for testing... <br>
 are still not developed in Matlab but should be written in Python. <br>
+>>>>>>> 0cf0d1aa2f058fdc0d881fad86195c37539fc0fd
